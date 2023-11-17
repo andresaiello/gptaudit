@@ -84,13 +84,6 @@ const Home = () => {
   const [results, setResults] = useState<Results | undefined>(undefined);
   const [loading, setLoading] = useState(false);
 
-
-    useEffect(() => {
-        if (results) {
-            setLoading(false);
-        }
-    }, [results]);
-
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
@@ -99,13 +92,18 @@ const Home = () => {
         return;
     }
 
+    // Set loading to true and reset results
+    setLoading(true);
+    setResults(undefined);
     console.log('sending url', url)
     try {
       const response = await axios.post('/api/analyze', { url });
       console.log(response.data);
       setResults(response.data);
+      setLoading(false);
       
     } catch (error) {
+        setLoading(false);
       console.error(error);
     }
   };
@@ -130,7 +128,7 @@ const Home = () => {
         <p>Loading...</p>
       ) : null}
     <StyledResults>
-      {results ? (
+      {results && !loading ? (
         <>
           <h2>Results ({results.solidityFiles.length})</h2>          
           {
