@@ -2,73 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import styled from 'styled-components';
-
-const StyledDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh; // changed from height to min-height
-  background-color: #f5f5f5;
-`;
-
-const StyledForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-`;
-
-const StyledInput = styled.input`
-  width: 300px;
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  font-size: 16px;
-  color: #333;
-`;
-
-const StyledButton = styled.button`
-  width: 100px;
-  padding: 10px;
-  border-radius: 5px;
-  border: none;
-  background-color: #0070f3;
-  color: #fff;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-
-  &:hover {
-    background-color: #0051bb;
-  }
-`;
-
-const StyledResults = styled.div`
-  width: 90%; // changed from 100% to 90%
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  margin-top: 20px;
-  color: #ccc;
-
-  h2 {
-    color: #000; // strong black
-    font-weight: 900; // make it stronger than h3
-  }
-
-  h3 {
-    color: #000; // strong black
-    font-weight: bold; // make it bold
-  }
-`;
+import { StyledDiv, StyledForm, StyledButton, StyledInput, StyledResults } from './styles';
 
 interface AuditResult {
     path: string;
@@ -128,21 +62,24 @@ const Home = () => {
         <p>Loading...</p>
       ) : null}
     <StyledResults>
-      {results && !loading ? (
-        <>
-          <h2>Results ({results.solidityFiles.length})</h2>          
-          {
-            results.solidityFiles.map((file, index) =>  (
-                <div key={index}>
-                <h3>{file.path}</h3>
-                {file.response.split('\n\n').map((item, key) => {
-                    return <span key={key}>{item}<br /><br /></span>
-                })}
-                </div>
-            ))
-          }
-        </>
-      ) : "no results"}
+        {loading ? (
+          <p>Loading...</p>
+        ) : results ? (
+          <>
+            <h2>Results ({results.solidityFiles.length})</h2>          
+            {
+              results.solidityFiles.map((file, index) =>  (
+                  <div key={index}>
+                  <h3>{file.path}</h3>
+                  {file.response.split('\n\n').map((item, key) => {
+                      return <span key={key}>{item}<br /><br /></span>
+                  })}
+                  </div>
+              ))
+            }
+          </>
+        ) : "No results"}
+      
     </StyledResults>
     </StyledDiv>
   );
